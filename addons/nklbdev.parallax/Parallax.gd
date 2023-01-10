@@ -1,6 +1,7 @@
 @tool
 extends Node2D
 class_name Parallax
+@icon("type_icon.svg")
 
 const __max_arrow_size: float = 6.0
 const __line_width: float = 1.4
@@ -52,11 +53,11 @@ func __set_motion_offset(value: Vector2):
 
 func __update_position() -> void:
 	if enabled and (enabled_in_editor or not __is_editor) and is_inside_tree():
-		var parent = get_parent()
-		if parent is Node2D:
-			var screen_center_local = (parent.get_viewport_transform() * parent.get_global_transform()) \
-				.affine_inverse() * Vector2(get_viewport().size / 2)
-			position = screen_center_local * parent.global_scale * motion_scale * parent.global_scale + motion_offset
+		var parent_node_2d: Node2D = get_parent() as Node2D
+		if parent_node_2d != null:
+			var screen_center_local: Vector2 = (parent_node_2d.get_viewport_transform() * parent_node_2d.get_global_transform()) \
+				.affine_inverse() * Vector2(get_viewport_rect().size / 2)
+			position = screen_center_local * parent_node_2d.global_scale * motion_scale * parent_node_2d.global_scale + motion_offset
 	queue_redraw()
 
 func _process(_delta: float) -> void:
@@ -98,10 +99,10 @@ func __draw_arrow(from: Vector2, to: Vector2, with_triangle: bool = false) -> vo
 	if not with_triangle:
 		draw_line(from, to, __draw_color, __line_width)
 		return
-	var distance = from.distance_to(to)
-	var arrow_size = clamp(distance * 2 / 3, __line_width, __max_arrow_size)
+	var distance: float = from.distance_to(to)
+	var arrow_size: float = clampf(distance * 2 / 3, __line_width, __max_arrow_size)
 
-	var path = to - from
+	var path: Vector2 = to - from
 	if distance < __line_width:
 		arrow_size = distance
 	else:
