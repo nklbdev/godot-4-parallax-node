@@ -1,7 +1,5 @@
-@tool
+@tool @icon("type_icon.svg")
 extends Node2D
-class_name Parallax
-@icon("type_icon.svg")
 
 const __max_arrow_size: float = 6.0
 const __line_width: float = 1.4
