@@ -10,7 +10,7 @@ var __draw_disabled_color: Color
 @onready var __is_editor: bool = Engine.is_editor_hint()
 @onready var __packed_arrow_points: PackedVector2Array = PackedVector2Array(__arrow_points)
 
-enum ProcessMode {
+enum MotionProcessMode {
 	PROCESS = 0,
 	PHYSICS_PROCESS = 1
 }
@@ -47,7 +47,7 @@ func __set_motion_offset(value: Vector2):
 	motion_offset = value
 	__update_position()
 
-@export var motion_process_mode: int = ProcessMode.PROCESS
+@export var motion_process_mode: MotionProcessMode = MotionProcessMode.PROCESS
 
 func __update_position() -> void:
 	if enabled and (enabled_in_editor or not __is_editor) and is_inside_tree():
@@ -59,11 +59,11 @@ func __update_position() -> void:
 	queue_redraw()
 
 func _process(_delta: float) -> void:
-	if __is_editor or motion_process_mode == ProcessMode.PROCESS:
+	if __is_editor or motion_process_mode == MotionProcessMode.PROCESS:
 		__update_position()
 
 func _physics_process(delta: float) -> void:
-	if not __is_editor and motion_process_mode == ProcessMode.PHYSICS_PROCESS:
+	if not __is_editor and motion_process_mode == MotionProcessMode.PHYSICS_PROCESS:
 		__update_position()
 
 func _draw():
